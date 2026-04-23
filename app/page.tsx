@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import {
-  CheckCircle,
   BarChart2,
   Shield,
   Clock,
@@ -8,80 +7,86 @@ import {
   Star,
   TrendingUp,
   FileCheck,
-  Users,
 } from 'lucide-react'
 
 const features = [
   {
     icon: BarChart2,
-    title: 'Análise em Tempo Real',
+    title: 'Análise com critérios reais do banco',
     description:
-      'Responda algumas perguntas e receba sua taxa de aprovação instantaneamente, com detalhes de cada fator.',
+      'Seu perfil é avaliado da mesma forma que o banco analisa na aprovação.',
   },
   {
     icon: TrendingUp,
-    title: 'Plano de Melhoria',
+    title: 'Clareza do que precisa ajustar',
     description:
-      'Veja exatamente o que falta para aumentar suas chances e receba um passo-a-passo personalizado.',
+      'Você entende exatamente o que pode estar impedindo sua aprovação e como evoluir.',
   },
   {
     icon: Shield,
-    title: 'Seguro e Confidencial',
+    title: 'Seus dados protegidos e respeitados',
     description:
-      'Seus dados ficam protegidos. Não realizamos consultas ao SPC/Serasa sem sua autorização.',
+      'Seus dados são utilizados apenas para análise do seu perfil. Nenhuma consulta é feita sem sua autorização.',
   },
   {
     icon: Clock,
-    title: 'Resultado em 3 Minutos',
+    title: 'Resultado rápido e direto ao ponto',
     description:
-      'Nossa análise leva menos de 3 minutos. Sem burocracia, sem espera, sem complicação.',
+      'Em poucos minutos, você entende sua situação e o que precisa ajustar para avançar com segurança.',
   },
 ]
 
 const steps = [
   {
     num: '01',
-    title: 'Preencha o formulário',
-    desc: 'Informe dados pessoais, financeiros e detalhes do bem que deseja financiar.',
+    title: 'Responda algumas perguntas rápidas',
+    desc: 'Você informa seus dados e entendemos como o banco enxerga seu perfil hoje.',
   },
   {
     num: '02',
-    title: 'Receba seu score',
-    desc: 'Calculamos sua taxa de aprovação com base em 5 fatores principais.',
+    title: 'Entenda seu perfil',
+    desc: 'Você descobre se já pode ser aprovado ou o que está te impedindo de avançar.',
   },
   {
     num: '03',
-    title: 'Siga as orientações',
-    desc: 'Veja o que precisa melhorar e acompanhe seu progresso até a aprovação.',
+    title: 'Próximo passo com segurança',
+    desc: 'Você recebe a orientação certa para evoluir seu perfil até a aprovação.',
   },
 ]
 
 const factors = [
-  { label: 'Situação do CPF', weight: '30%' },
-  { label: 'Score de Crédito', weight: '25%' },
-  { label: 'Comprometimento de Renda', weight: '20%' },
-  { label: 'Estabilidade de Emprego', weight: '15%' },
-  { label: 'Entrada Disponível', weight: '10%' },
+  { label: 'Situação do CPF (histórico financeiro)', weight: '30%' },
+  { label: 'Comportamento financeiro', weight: '25%' },
+  { label: 'Comprometimento da sua renda', weight: '20%' },
+  { label: 'Estabilidade da sua renda', weight: '15%' },
+  { label: 'Capacidade de investimento inicial', weight: '10%' },
 ]
 
 const testimonials = [
   {
     name: 'Mariana S.',
-    city: 'São Paulo, SP',
-    text: 'Em 3 minutos soube exatamente o que precisava fazer para ser aprovada. Segui o plano e consegui meu apartamento!',
-    score: 87,
+    city: 'São Paulo/SP',
+    text: 'Eu achava que não seria aprovada. Depois da análise, entendi exatamente o que precisava ajustar. Quando dei entrada, já estava preparada.',
   },
   {
-    name: 'Carlos R.',
-    city: 'Belo Horizonte, MG',
-    text: 'Tinha medo de ser reprovado. A análise mostrou que eu só precisava de mais 3 meses de vínculo. Planejei e deu certo.',
-    score: 73,
+    name: 'Juliana e Rafael',
+    city: 'Catanduva/SP',
+    text: 'A gente já tinha tentado antes e não deu certo. Depois da análise, entendemos onde estávamos errando. Organizamos tudo e seguimos com mais segurança.',
+  },
+  {
+    name: 'Carlos M.',
+    city: 'São José do Rio Preto/SP',
+    text: 'Eu achava que por ser autônomo seria impossível. A análise me mostrou exatamente o que o banco precisava ver. Hoje sei como me organizar para dar entrada.',
   },
   {
     name: 'Fernanda L.',
-    city: 'Curitiba, PR',
-    text: 'Finalmente entendi o que influencia o financiamento. As orientações foram claras e muito úteis.',
-    score: 91,
+    city: 'Novo Horizonte/SP',
+    text: 'Eu tinha renda, mas não sabia se seria aprovada. Depois da análise, ficou claro o que precisava ajustar. Agora me sinto segura para dar o próximo passo.',
+  },
+  {
+    name: 'Aline R.',
+    city: 'Irapuã/SP',
+    text: 'Eu achava que não era pra mim. A análise me mostrou que era possível, só precisava de organização. Isso me deu esperança e direção.',
   },
 ]
 
@@ -116,7 +121,6 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 pt-32 pb-24">
-        {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
           <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-emerald-600/10 blur-3xl" />
@@ -125,18 +129,21 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-6xl px-4 text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 text-sm text-emerald-400">
             <Star className="h-3.5 w-3.5 fill-current" />
-            Análise gratuita e sem consulta ao SPC/Serasa
+            Análise gratuita com visão real do banco (sem impacto no seu CPF)
           </div>
 
           <h1 className="mb-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
-            Descubra suas chances de{' '}
-            <span className="text-emerald-400">aprovação</span> no financiamento
+            Descubra se você está pronto para ser{' '}
+            <span className="text-emerald-400">aprovado</span> no financiamento
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-slate-300">
-            Nossa análise inteligente avalia os 5 principais fatores que determinam a
-            aprovação do seu crédito. Em 3 minutos, você sabe exatamente onde está e o
-            que precisa melhorar.
+          <p className="mx-auto mb-4 max-w-2xl text-lg text-slate-300">
+            A aprovação não depende só da renda, depende de como o banco enxerga seu perfil.
+            Em até 3 minutos, você entende onde está e o que precisa ajustar para avançar da forma certa.
+          </p>
+
+          <p className="mx-auto mb-10 max-w-xl text-sm text-slate-400">
+            Essa análise segue os mesmos critérios que utilizamos na Financiare para preparar nossos clientes para aprovação.
           </p>
 
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -144,23 +151,23 @@ export default function HomePage() {
               href="/simulacao"
               className="group flex items-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 text-base font-bold text-white shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 transition-all"
             >
-              Fazer Análise Gratuita
+              Quero saber se posso ser aprovado
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/auth/login"
               className="rounded-xl border border-slate-600 px-8 py-4 text-base font-semibold text-slate-300 hover:border-slate-400 hover:text-white transition-colors"
             >
-              Acessar minha conta
+              Já comecei minha análise
             </Link>
           </div>
 
           {/* Hero Stats */}
           <div className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-8">
             {[
-              { value: '+2.400', label: 'Análises realizadas' },
-              { value: '78%', label: 'Taxa de aprovação' },
-              { value: '3 min', label: 'Tempo médio' },
+              { value: '+2.400', label: 'Pessoas já analisadas' },
+              { value: '78%', label: 'Avançam para aprovação' },
+              { value: '3 min', label: 'Tempo da análise' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-3xl font-extrabold text-emerald-400">{stat.value}</div>
@@ -176,7 +183,9 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-14 text-center">
             <h2 className="text-3xl font-bold text-slate-900">Como funciona</h2>
-            <p className="mt-3 text-slate-500">Simples, rápido e sem burocracia</p>
+            <p className="mt-3 text-slate-500">
+              Entenda seu perfil antes de dar entrada no financiamento
+            </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {steps.map((step) => (
@@ -196,9 +205,11 @@ export default function HomePage() {
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-14 text-center">
-            <h2 className="text-3xl font-bold text-slate-900">Por que usar a Financiare</h2>
+            <h2 className="text-3xl font-bold text-slate-900">
+              Por que fazer sua análise com a Financiare
+            </h2>
             <p className="mt-3 text-slate-500">
-              Sua análise de crédito mais transparente e completa do mercado
+              Você não precisa adivinhar se será aprovado. Precisa entender como o banco analisa seu perfil.
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -224,18 +235,17 @@ export default function HomePage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
               <h2 className="mb-4 text-3xl font-bold text-white">
-                Os 5 fatores que determinam a sua aprovação
+                O que realmente define a aprovação do seu financiamento
               </h2>
               <p className="mb-8 text-slate-400">
-                Nossa análise avalia cada um dos fatores que os bancos e financeiras
-                utilizam para decidir sobre o seu crédito. Você entende onde está bem e
-                onde precisa melhorar.
+                A aprovação não depende de um único fator. O banco analisa seu perfil como um todo.
+                Aqui você entende o que pode aprovar… e o que pode reprovar seu financiamento.
               </p>
               <Link
                 href="/simulacao"
                 className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 font-semibold text-white hover:bg-emerald-400 transition-colors"
               >
-                Analisar agora <ArrowRight className="h-4 w-4" />
+                Iniciar minha análise <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
             <div className="space-y-3">
@@ -264,10 +274,14 @@ export default function HomePage() {
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mb-14 text-center">
-            <h2 className="text-3xl font-bold text-slate-900">Quem já usou aprovou</h2>
-            <p className="mt-3 text-slate-500">Veja o que nossos clientes falam</p>
+            <h2 className="text-3xl font-bold text-slate-900">
+              Quem entende o processo, aprova com mais segurança
+            </h2>
+            <p className="mt-3 text-slate-500">
+              Clientes que organizaram o perfil antes de dar entrada tiveram mais clareza e segurança no processo.
+            </p>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((t) => (
               <div key={t.name} className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
@@ -280,9 +294,8 @@ export default function HomePage() {
                       <div className="text-xs text-slate-400">{t.city}</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-extrabold text-emerald-600">{t.score}%</div>
-                    <div className="text-xs text-slate-400">aprovação</div>
+                  <div className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    Perfil ajustado
                   </div>
                 </div>
                 <p className="text-sm text-slate-600">&ldquo;{t.text}&rdquo;</p>
@@ -294,6 +307,9 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+          <div className="mt-10 text-center">
+            <p className="text-sm font-semibold text-slate-400">+2.400 perfis analisados</p>
+          </div>
         </div>
       </section>
 
@@ -302,17 +318,16 @@ export default function HomePage() {
         <div className="mx-auto max-w-3xl px-4 text-center">
           <FileCheck className="mx-auto mb-6 h-14 w-14 text-emerald-200" />
           <h2 className="mb-4 text-3xl font-bold text-white">
-            Pronto para descobrir suas chances?
+            Agora você já sabe o que pode estar te impedindo
           </h2>
           <p className="mb-8 text-emerald-100">
-            Análise gratuita, sem consulta ao SPC/Serasa e sem compromisso. Resultado em
-            menos de 3 minutos.
+            Em poucos minutos, você descobre se pode ser aprovado hoje e o que precisa ajustar para avançar com segurança.
           </p>
           <Link
             href="/simulacao"
             className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-bold text-emerald-700 shadow-lg hover:bg-emerald-50 transition-colors"
           >
-            Fazer Análise Gratuita <ArrowRight className="h-4 w-4" />
+            Iniciar minha análise <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>

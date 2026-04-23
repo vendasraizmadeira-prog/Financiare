@@ -28,7 +28,7 @@ export type CreditScoreRange =
 
 export type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed' | 'stable_union'
 
-export type FinancingType = 'property' | 'vehicle' | 'personal' | 'other'
+export type FinancingType = 'property' | 'vehicle' | 'personal' | 'other' | 'ready_property' | 'land_construction' | 'land_only' | 'evaluating'
 
 export type RestrictionLevel = 'none' | 'light' | 'severe'
 
@@ -63,6 +63,16 @@ export interface SimulationAnswers {
   down_payment: number      // entry amount available
   desired_term_months: number
   has_paid_asset: boolean   // owns a paid-off property/vehicle
+
+  // Optional qualification fields
+  has_fgts?: 'yes' | 'no' | 'unknown'
+  financing_with?: 'alone' | 'spouse' | 'other'
+  has_land?: boolean
+  city?: string
+  main_difficulty?: string
+  wants_guidance?: string
+  financing_timeline?: string
+  wants_contact?: string
 }
 
 // ============================================================

@@ -12,6 +12,7 @@ import {
   Loader2,
   TrendingUp,
   CheckCircle,
+  Shield,
 } from 'lucide-react'
 import { SIMULATION_STEPS } from '@/lib/scoring/questions'
 import { calculateScore } from '@/lib/scoring/algorithm'
@@ -159,6 +160,12 @@ export default function SimulacaoPage() {
           </div>
           <h1 className="text-2xl font-bold text-slate-900">{step.title}</h1>
           <p className="mt-1 text-slate-500">{step.subtitle}</p>
+          {step.note && (
+            <div className="mt-3 flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-700 w-fit">
+              <Shield className="h-3.5 w-3.5 shrink-0" />
+              {step.note}
+            </div>
+          )}
         </div>
 
         {/* Questions */}
@@ -223,8 +230,8 @@ export default function SimulacaoPage() {
             {submitting
               ? 'Calculando...'
               : currentStep === totalSteps - 1
-              ? 'Ver minha análise'
-              : 'Continuar'}
+              ? 'Ver meu resultado'
+              : 'Continuar análise'}
             {!submitting && <ChevronRight className="h-4 w-4" />}
           </button>
         </div>

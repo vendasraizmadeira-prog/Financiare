@@ -94,8 +94,10 @@ function scoreRestrictions(answers: SimulationAnswers): ScoringFactor {
 
   return {
     id: 'restrictions',
-    name: 'Situação do CPF',
-    description: 'Presença de restrições/negativações no Serasa, SPC e Boa Vista',
+    name: 'Histórico do seu CPF',
+    description: has_restrictions
+      ? 'Seu CPF possui restrições, o que impacta diretamente sua aprovação.'
+      : 'Seu CPF está regular, o que é um ponto positivo para aprovação.',
     points,
     max_points: 30,
     percentage: Math.round((points / 30) * 100),
@@ -124,9 +126,8 @@ function scoreCreditScore(answers: SimulationAnswers): ScoringFactor {
 
   if (credit_score_range !== '851_1000' && credit_score_range !== 'unknown') {
     recommendations.push({
-      title: 'Pague todas as contas na data correta',
-      description:
-        'O histórico de pagamentos representa 35% do score. Pagamentos em dia por 6+ meses consecutivos têm grande impacto.',
+      title: 'Organize seu histórico de pagamentos',
+      description: 'Manter pagamentos em dia por alguns meses melhora diretamente sua análise no banco.',
       impact: 'high',
       icon: 'Calendar',
     })
@@ -150,8 +151,8 @@ function scoreCreditScore(answers: SimulationAnswers): ScoringFactor {
 
   return {
     id: 'credit_score',
-    name: 'Score de Crédito',
-    description: 'Pontuação nos bureaus de crédito (Serasa, SPC, Boa Vista)',
+    name: 'Seu comportamento financeiro',
+    description: 'Como o mercado financeiro enxerga seu histórico de pagamentos.',
     points,
     max_points: 25,
     percentage: Math.round((points / 25) * 100),
@@ -173,8 +174,8 @@ function scoreIncomeCommitment(
   if (monthly_income <= 0) {
     return {
       id: 'income_commitment',
-      name: 'Comprometimento de Renda',
-      description: 'Parcela estimada em relação à renda mensal bruta',
+      name: 'Comprometimento da sua renda',
+      description: 'Relação entre seus compromissos financeiros e sua renda mensal.',
       points: 0,
       max_points: 20,
       percentage: 0,
@@ -203,8 +204,8 @@ function scoreIncomeCommitment(
 
   if (totalCommitmentPct > 30) {
     recommendations.push({
-      title: 'Aumente o valor da entrada',
-      description: `Com mais entrada, a parcela cai e o comprometimento de renda melhora. Bancos preferem que a parcela não ultrapasse 30% da renda bruta (atualmente estimado em ${totalCommitmentPct.toFixed(0)}%).`,
+      title: 'Aumentar sua entrada pode destravar sua aprovação',
+      description: 'Com uma entrada maior, o banco reduz o risco e aumenta suas chances de aprovação.',
       impact: 'high',
       icon: 'TrendingUp',
     })
@@ -219,9 +220,8 @@ function scoreIncomeCommitment(
   }
   if (totalCommitmentPct > 40) {
     recommendations.push({
-      title: 'Considere aumentar a renda com um codevedor',
-      description:
-        'Incluir um codevedor (cônjuge, familiar) soma as rendas e reduz o percentual de comprometimento, aumentando significativamente as chances de aprovação.',
+      title: 'Você pode usar um co-participante para fortalecer sua renda',
+      description: 'Somar renda com outra pessoa pode aumentar significativamente suas chances.',
       impact: 'medium',
       icon: 'Users',
     })
@@ -229,8 +229,10 @@ function scoreIncomeCommitment(
 
   return {
     id: 'income_commitment',
-    name: 'Comprometimento de Renda',
-    description: `Parcela estimada + dívidas atuais em relação à renda (${totalCommitmentPct.toFixed(0)}% comprometido)`,
+    name: 'Comprometimento da sua renda',
+    description: totalCommitmentPct > 30
+      ? `Sua renda está muito comprometida (${totalCommitmentPct.toFixed(0)}%), o que pode impedir a aprovação neste momento.`
+      : `Sua renda está bem posicionada (${totalCommitmentPct.toFixed(0)}% comprometido), favorecendo sua aprovação.`,
     points,
     max_points: 20,
     percentage: Math.round((points / 20) * 100),
@@ -278,27 +280,27 @@ function scoreEmployment(answers: SimulationAnswers): ScoringFactor {
   if (!has_proof_of_income) {
     points = Math.max(0, points - 3)
     recommendations.push({
-      title: 'Reúna comprovantes de renda dos últimos 3 meses',
+      title: 'Organize sua comprovação de renda',
       description:
-        'Sem comprovante de renda, a maioria das financeiras rejeita automaticamente. Junte holerites, decore-se de IR, extratos bancários ou declaração do contador.',
+        'Para autônomos, ter documentação organizada faz toda diferença na aprovação. Junte holerites, extratos bancários ou declaração do contador.',
       impact: 'high',
       icon: 'FileText',
     })
   }
   if (['autonomous', 'business_owner'].includes(employment_type)) {
     recommendations.push({
-      title: 'Prepare uma declaração do contador atualizada',
+      title: 'Organize sua comprovação de renda',
       description:
-        'Para autônomos e empresários, a declaração de IR e o pró-labore formalizado são os documentos mais valorizados pelas financeiras.',
+        'Para autônomos, ter documentação organizada faz toda diferença na aprovação. A declaração de IR e o pró-labore formalizado são os documentos mais valorizados.',
       impact: 'medium',
       icon: 'Briefcase',
     })
   }
   if (employment_time === 'less_3m' || employment_time === '3m_6m') {
     recommendations.push({
-      title: 'Aguarde 6+ meses no emprego atual antes de solicitar',
+      title: 'Aguarde 6+ meses na atividade atual antes de solicitar',
       description:
-        'Tempo de vínculo empregatício é um dos principais critérios. Com 1 ano ou mais, sua pontuação nesse fator melhora consideravelmente.',
+        'Tempo de estabilidade na renda é um dos principais critérios. Com 1 ano ou mais, sua pontuação nesse fator melhora consideravelmente.',
       impact: 'medium',
       icon: 'Clock',
     })
@@ -312,8 +314,8 @@ function scoreEmployment(answers: SimulationAnswers): ScoringFactor {
 
   return {
     id: 'employment',
-    name: 'Estabilidade de Emprego',
-    description: 'Tipo de vínculo, tempo de emprego e capacidade de comprovar renda',
+    name: 'Estabilidade da sua renda',
+    description: 'Seu tipo e tempo de renda influenciam diretamente a aprovação.',
     points,
     max_points: 15,
     percentage: Math.round((points / 15) * 100),
@@ -332,8 +334,8 @@ function scoreDownPayment(answers: SimulationAnswers): ScoringFactor {
   if (asset_value <= 0) {
     return {
       id: 'down_payment',
-      name: 'Entrada Disponível',
-      description: 'Percentual do valor do bem disponível como entrada',
+      name: 'Sua capacidade de entrada',
+      description: 'Percentual do valor do imóvel disponível como entrada.',
       points: 0,
       max_points: 10,
       percentage: 0,
@@ -360,18 +362,16 @@ function scoreDownPayment(answers: SimulationAnswers): ScoringFactor {
 
   if (pct < 20) {
     recommendations.push({
-      title: `Aumente a entrada para pelo menos 20% do valor (${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(asset_value * 0.2)})`,
-      description:
-        'Uma entrada maior reduz o valor financiado, diminui a parcela, melhora as condições do crédito e aumenta as chances de aprovação.',
+      title: 'Aumentar sua entrada fortalece sua aprovação',
+      description: 'Quanto maior sua entrada, menor o risco para o banco e melhores são suas condições.',
       impact: 'high',
       icon: 'PiggyBank',
     })
   }
   if (pct < 10) {
     recommendations.push({
-      title: 'Pesquise programas habitacionais com entrada facilitada',
-      description:
-        'Programas como Minha Casa Minha Vida permitem entradas menores para imóveis dentro das faixas de preço. Verifique se o bem se enquadra.',
+      title: 'Seu perfil pode se encaixar em programas habitacionais',
+      description: 'Existem condições que podem facilitar sua entrada e melhorar sua aprovação.',
       impact: 'medium',
       icon: 'Home',
     })
@@ -379,8 +379,10 @@ function scoreDownPayment(answers: SimulationAnswers): ScoringFactor {
 
   return {
     id: 'down_payment',
-    name: 'Entrada Disponível',
-    description: `${pct.toFixed(0)}% do valor do bem disponível como entrada`,
+    name: 'Sua capacidade de entrada',
+    description: pct > 0
+      ? `Você tem ${pct.toFixed(0)}% do valor do imóvel disponível como entrada.`
+      : 'Sem entrada disponível no momento. Isso impacta as condições do financiamento.',
     points,
     max_points: 10,
     percentage: Math.round((points / 10) * 100),
@@ -395,8 +397,8 @@ function scoreDownPayment(answers: SimulationAnswers): ScoringFactor {
 export function calculateScore(answers: SimulationAnswers): ScoringResult {
   const financingAmount = Math.max(0, answers.asset_value - answers.down_payment)
 
-  // Typical annual financing rate (adjust per product if needed)
-  const annualRate = answers.financing_type === 'property' ? 0.1099 : 0.1599
+  const propertyTypes = ['property', 'ready_property', 'land_construction', 'land_only', 'evaluating']
+  const annualRate = propertyTypes.includes(answers.financing_type) ? 0.1099 : 0.1599
 
   const monthlyPayment = calcMonthlyPayment(
     financingAmount,

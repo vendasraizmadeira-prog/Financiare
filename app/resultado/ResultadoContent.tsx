@@ -8,13 +8,13 @@ import {
   TrendingUp,
   RotateCcw,
   Share2,
-  Download,
   CheckCircle,
   AlertCircle,
   XCircle,
   Info,
   ChevronDown,
   ChevronUp,
+  AlertTriangle,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { ScoringResult, ScoringFactor, FactorStatus } from '@/types'
@@ -138,7 +138,7 @@ export default function ResultadoContent() {
             {/* Text */}
             <div className="mt-6 text-center md:mt-0 md:text-left">
               <p className="text-slate-400 text-sm font-medium uppercase tracking-wider">
-                Sua taxa de aprovação
+                Resultado da sua análise
               </p>
               <h1 className="mt-2 text-5xl font-extrabold" style={{ color }}>
                 {score}%
@@ -147,32 +147,41 @@ export default function ResultadoContent() {
                 className="mt-2 inline-block rounded-full px-4 py-1 text-sm font-bold"
                 style={{ background: `${color}22`, color }}
               >
-                Probabilidade {label}
+                {score >= 80
+                  ? 'Perfil bem posicionado'
+                  : score >= 60
+                  ? 'Perfil com potencial de aprovação'
+                  : score >= 40
+                  ? 'Perfil em desenvolvimento'
+                  : 'Perfil precisa de atenção'}
               </div>
               <p className="mt-4 text-sm text-slate-300 max-w-sm">
                 {score >= 80
-                  ? 'Suas chances de aprovação são excelentes! Agende uma conversa com um especialista para começar o processo.'
+                  ? 'Seu perfil está bem posicionado para aprovação. Veja os detalhes abaixo e siga as orientações para avançar com segurança.'
                   : score >= 60
-                  ? 'Você tem boas chances de aprovação. Siga as recomendações abaixo para maximizar seu resultado.'
+                  ? 'Você tem potencial de aprovação, mas alguns pontos ainda precisam de atenção para aumentar sua segurança no processo.'
                   : score >= 40
-                  ? 'Há oportunidades de melhora. Siga o plano abaixo para aumentar sua pontuação antes de solicitar.'
-                  : 'Sua pontuação precisa de atenção. Siga o plano de melhoria e retorne para uma nova análise.'}
+                  ? 'Há pontos que precisam de ajuste antes de avançar. Siga o plano abaixo para melhorar seu perfil.'
+                  : 'Seu perfil precisa de atenção em alguns critérios. Siga as orientações para se preparar para a aprovação.'}
               </p>
 
-              {result.financing_amount > 0 && (
-                <div className="mt-4 flex flex-wrap gap-4">
-                  <div>
-                    <div className="text-xs text-slate-400">Valor a financiar</div>
-                    <div className="font-bold text-white">{formatCurrency(result.financing_amount)}</div>
-                  </div>
-                  {result.estimated_monthly_payment > 0 && (
-                    <div>
-                      <div className="text-xs text-slate-400">Parcela estimada</div>
-                      <div className="font-bold text-white">{formatCurrency(result.estimated_monthly_payment)}/mês</div>
-                    </div>
-                  )}
+              {/* Diagnostic block */}
+              <div className="mt-4 space-y-1.5 text-left">
+                <div className="flex items-center gap-2 text-sm text-emerald-400">
+                  <CheckCircle className="h-4 w-4 shrink-0" />
+                  <span>Seu perfil tem potencial para avançar</span>
                 </div>
-              )}
+                {score < 80 && (
+                  <div className="flex items-center gap-2 text-sm text-yellow-400">
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
+                    <span>Alguns critérios ainda podem limitar sua aprovação</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <ArrowRight className="h-4 w-4 shrink-0" />
+                  <span>Com a estratégia certa, suas chances ficam mais seguras</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -183,7 +192,7 @@ export default function ResultadoContent() {
             href="/auth/register"
             className="flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors shadow-md shadow-emerald-100"
           >
-            Falar com especialista <ArrowRight className="h-4 w-4" />
+            Quero orientação para ser aprovado <ArrowRight className="h-4 w-4" />
           </Link>
           <button
             onClick={() => {
@@ -199,6 +208,24 @@ export default function ResultadoContent() {
             <Share2 className="h-4 w-4" /> Compartilhar
           </button>
         </div>
+
+        {/* Attention points */}
+        {result.factors.some((f) => f.status === 'poor' || f.status === 'critical' || f.status === 'fair') && (
+          <div className="mb-6 rounded-2xl border border-yellow-100 bg-yellow-50 p-5">
+            <h3 className="mb-3 text-sm font-bold text-yellow-800">Pontos que merecem atenção</h3>
+            <div className="space-y-1.5">
+              {result.factors
+                .filter((f) => f.status === 'poor' || f.status === 'critical' || f.status === 'fair')
+                .slice(0, 3)
+                .map((f) => (
+                  <div key={f.id} className="flex items-center gap-2 text-sm text-yellow-700">
+                    <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                    <span>{f.name}</span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
 
         {/* Factors Grid */}
         <h2 className="mb-4 text-xl font-bold text-slate-900">Análise Detalhada por Fator</h2>
@@ -219,7 +246,7 @@ export default function ResultadoContent() {
         {result.general_recommendations.length > 0 && (
           <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 mb-8">
             <h2 className="mb-5 text-xl font-bold text-slate-900">
-              Seu Plano de Ação Personalizado
+              O que você precisa ajustar para ser aprovado
             </h2>
             <div className="space-y-4">
               {result.general_recommendations.map((rec, i) => (
@@ -260,20 +287,28 @@ export default function ResultadoContent() {
           </div>
         )}
 
-        {/* Re-simulate */}
+        {/* Final CTA */}
         <div className="rounded-2xl bg-emerald-600 p-6 text-center text-white">
           <h3 className="mb-2 text-lg font-bold">
-            Após seguir o plano, faça uma nova análise
+            Agora você tem dois caminhos
           </h3>
-          <p className="mb-4 text-sm text-emerald-100">
-            Acompanhe a evolução da sua pontuação até atingir a aprovação desejada.
+          <p className="mb-6 text-sm text-emerald-100">
+            Você pode tentar sozinho… ou seguir com orientação para aumentar suas chances com mais segurança.
           </p>
-          <Link
-            href="/simulacao"
-            className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors"
-          >
-            Refazer análise <RotateCcw className="h-4 w-4" />
-          </Link>
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <Link
+              href="/auth/register"
+              className="flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors"
+            >
+              Quero orientação para ser aprovado <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/simulacao"
+              className="flex items-center gap-2 rounded-xl border border-emerald-400 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
+            >
+              <RotateCcw className="h-4 w-4" /> Refazer análise
+            </Link>
+          </div>
         </div>
       </div>
     </div>
