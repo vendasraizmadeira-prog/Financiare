@@ -26,9 +26,10 @@ export async function proxy(request: NextRequest) {
   // Refresh session if expired
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Protect dashboard route
-  const isDashboard = request.nextUrl.pathname.startsWith('/dashboard')
-  if (isDashboard && !user) {
+  // Protect authenticated routes
+  const pathname = request.nextUrl.pathname
+  const isProtected = pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
+  if (isProtected && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/auth/login'
     return NextResponse.redirect(url)
