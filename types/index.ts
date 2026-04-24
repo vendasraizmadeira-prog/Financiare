@@ -34,12 +34,39 @@ export type RestrictionLevel = 'none' | 'light' | 'severe'
 
 export type FactorStatus = 'excellent' | 'good' | 'fair' | 'poor' | 'critical' | 'unknown'
 
+export type LeadStage =
+  | 'new'
+  | 'hot'
+  | 'to_schedule'
+  | 'in_contact'
+  | 'closed'
+  | 'not_qualified'
+
+export const LEAD_STAGE_LABELS: Record<LeadStage, string> = {
+  new: 'Novo',
+  hot: 'Quente 🔥',
+  to_schedule: 'Agendar reunião',
+  in_contact: 'Em atendimento',
+  closed: 'Fechado ✅',
+  not_qualified: 'Não qualificado',
+}
+
+export const LEAD_STAGE_COLORS: Record<LeadStage, string> = {
+  new: 'bg-slate-100 text-slate-600',
+  hot: 'bg-orange-100 text-orange-700',
+  to_schedule: 'bg-blue-100 text-blue-700',
+  in_contact: 'bg-purple-100 text-purple-700',
+  closed: 'bg-emerald-100 text-emerald-700',
+  not_qualified: 'bg-red-100 text-red-600',
+}
+
 // ============================================================
 // Questionnaire answers (stored as JSON in Supabase)
 // ============================================================
 export interface SimulationAnswers {
   // Step 1 – Dados Pessoais
   full_name: string
+  phone: string
   cpf: string
   birth_date: string        // ISO date string "YYYY-MM-DD"
   marital_status: MaritalStatus
@@ -120,8 +147,10 @@ export interface ProfileRow {
 
 export interface SimulationRow {
   id: string
-  user_id: string | null      // null = guest simulation
+  user_id: string | null
   answers: SimulationAnswers
   result: ScoringResult
+  stage: LeadStage
+  admin_notes: string
   created_at: string
 }

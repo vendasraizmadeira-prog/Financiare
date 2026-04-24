@@ -18,7 +18,7 @@ import { SIMULATION_STEPS } from '@/lib/scoring/questions'
 import { calculateScore } from '@/lib/scoring/algorithm'
 import { createClient } from '@/lib/supabase/client'
 import type { SimulationAnswers } from '@/types'
-import { cn, formatCPF, formatCurrency, parseCurrencyInput } from '@/lib/utils'
+import { cn, formatCPF, formatPhone, formatCurrency, parseCurrencyInput } from '@/lib/utils'
 
 // ── Icons map for steps ─────────────────────────────────────
 const stepIcons = { User, BarChart2, Briefcase, Home }
@@ -281,6 +281,20 @@ function FieldRenderer({ question: q, value, onChange, error }: FieldProps) {
         value={(value as string) ?? ''}
         onChange={(e) => onChange(e.target.value)}
         placeholder={q.placeholder}
+        className={cn(base, borderClass)}
+      />
+    )
+  }
+
+  if (q.type === 'phone') {
+    return (
+      <input
+        type="tel"
+        inputMode="tel"
+        value={(value as string) ?? ''}
+        onChange={(e) => onChange(formatPhone(e.target.value))}
+        placeholder={q.placeholder ?? '(00) 00000-0000'}
+        maxLength={15}
         className={cn(base, borderClass)}
       />
     )

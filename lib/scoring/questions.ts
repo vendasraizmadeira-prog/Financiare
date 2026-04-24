@@ -12,7 +12,7 @@ export interface Question {
   id: string
   label: string
   sublabel?: string
-  type: 'text' | 'cpf' | 'date' | 'number' | 'currency' | 'select' | 'radio' | 'boolean'
+  type: 'text' | 'cpf' | 'phone' | 'date' | 'number' | 'currency' | 'select' | 'radio' | 'boolean'
   options?: QuestionOption[]
   placeholder?: string
   required: boolean
@@ -41,6 +41,14 @@ export const SIMULATION_STEPS: Step[] = [
         type: 'text',
         placeholder: 'Seu nome completo',
         required: true,
+      },
+      {
+        id: 'phone',
+        label: 'Seu número de WhatsApp',
+        type: 'phone',
+        placeholder: '(00) 00000-0000',
+        required: true,
+        hint: 'Usado para entrarmos em contato com sua orientação personalizada.',
       },
       {
         id: 'cpf',
