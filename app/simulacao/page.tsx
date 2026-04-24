@@ -104,16 +104,19 @@ export default function SimulacaoPage() {
     const result = calculateScore(fullAnswers)
 
     const supabase = createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (authError) {
-      console.error('[simulacao] auth error:', authError.message)
+    // Not logged in — save locally so the user can claim after login
+    if (!user) {
+      sessionStorage.setItem('financiare_result', JSON.stringify({ answers: fullAnswers, result }))
+      router.push('/resultado?local=1')
+      return
     }
 
     const { data, error: insertError } = await supabase
       .from('simulations')
       .insert({
-        user_id: user?.id ?? null,
+        user_id: user.id,
         answers: fullAnswers,
         result,
       })
@@ -122,7 +125,7 @@ export default function SimulacaoPage() {
 
     if (insertError || !data) {
       const msg = insertError?.message ?? 'no data returned'
-      console.error('[simulacao] insert error:', msg, '| user:', user?.id ?? 'anon')
+      console.error('[simulacao] insert error:', msg)
       setSaveError(`Erro ao salvar (${msg}) — resultado exibido localmente.`)
       sessionStorage.setItem('financiare_result', JSON.stringify({ answers: fullAnswers, result }))
       router.push('/resultado?local=1')

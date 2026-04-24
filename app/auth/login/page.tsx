@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: signInData, error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
       if (error.message.toLowerCase().includes('email not confirmed')) {
@@ -31,7 +31,19 @@ export default function LoginPage() {
       return
     }
 
-    // Full reload so the proxy refreshes the session cookie before loading the dashboard
+    // Save any simulation filled before login
+    const pending = sessionStorage.getItem('financiare_result')
+    if (pending && signInData.user) {
+      try {
+        const { answers, result } = JSON.parse(pending)
+        await supabase.from('simulations').insert({ user_id: signInData.user.id, answers, result })
+        sessionStorage.removeItem('financiare_result')
+      } catch {
+        // Non-blocking — user still lands on dashboard
+      }
+    }
+
+    // Full reload so the middleware refreshes the session cookie before loading the dashboard
     window.location.href = '/dashboard'
   }
 

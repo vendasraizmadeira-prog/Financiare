@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronUp,
   AlertTriangle,
+  BookmarkPlus,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import type { ScoringResult, ScoringFactor, FactorStatus } from '@/types'
@@ -186,6 +187,22 @@ export default function ResultadoContent() {
             </div>
           </div>
         </div>
+
+        {/* Save-to-account banner (anonymous mode) */}
+        {local && (
+          <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4">
+            <div>
+              <p className="text-sm font-semibold text-emerald-900">Sua análise não está salva</p>
+              <p className="text-xs text-emerald-700 mt-0.5">Crie uma conta ou faça login para guardar este resultado e acompanhar sua evolução.</p>
+            </div>
+            <Link
+              href="/auth/login"
+              className="flex shrink-0 items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
+            >
+              <BookmarkPlus className="h-4 w-4" /> Salvar
+            </Link>
+          </div>
+        )}
 
         {/* CTA Buttons */}
         <div className="mb-8 flex flex-wrap gap-3">
