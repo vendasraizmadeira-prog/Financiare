@@ -10,6 +10,7 @@ import {
   FileCheck,
 } from 'lucide-react'
 import AuthErrorBanner from './AuthErrorBanner'
+import { createClient } from '@/lib/supabase/server'
 
 const features = [
   {
@@ -92,7 +93,11 @@ const testimonials = [
   },
 ]
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const firstName = (user?.user_metadata?.full_name as string | undefined)?.split(' ')[0] ?? null
+
   return (
     <div className="min-h-screen bg-white">
       <Suspense>
@@ -109,18 +114,34 @@ export default function HomePage() {
             <span className="text-xl font-bold text-slate-900">Financiare</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              href="/auth/login"
-              className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
-            >
-              Entrar
-            </Link>
-            <Link
-              href="/simulacao"
-              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
-            >
-              Simular Agora
-            </Link>
+            {user ? (
+              <>
+                <span className="hidden text-sm text-slate-600 sm:block">
+                  Olá, <strong>{firstName}</strong>
+                </span>
+                <Link
+                  href="/dashboard"
+                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
+                >
+                  Minhas análises
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                >
+                  Entrar
+                </Link>
+                <Link
+                  href="/simulacao"
+                  className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
+                >
+                  Simular Agora
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -161,10 +182,10 @@ export default function HomePage() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              href="/auth/login"
+              href={user ? '/dashboard' : '/auth/login'}
               className="rounded-xl border border-slate-600 px-8 py-4 text-base font-semibold text-slate-300 hover:border-slate-400 hover:text-white transition-colors"
             >
-              Já comecei minha análise
+              {user ? 'Ver minhas análises' : 'Já comecei minha análise'}
             </Link>
           </div>
 
