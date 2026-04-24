@@ -108,11 +108,19 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-slate-500">
-            Não tem conta?{' '}
-            <Link href="/auth/register" className="font-semibold text-emerald-600 hover:text-emerald-700">
-              Criar conta grátis
-            </Link>
+          <div className="mt-6 space-y-2 text-center text-sm text-slate-500">
+            <div>
+              Não tem conta?{' '}
+              <Link href="/auth/register" className="font-semibold text-emerald-600 hover:text-emerald-700">
+                Criar conta grátis
+              </Link>
+            </div>
+            <div>
+              Link de confirmação expirou?{' '}
+              <Link href="/auth/confirmar" className="font-semibold text-emerald-600 hover:text-emerald-700">
+                Reenviar e-mail
+              </Link>
+            </div>
           </div>
         </div>
 

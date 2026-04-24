@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import {
   BarChart2,
   Shield,
@@ -8,6 +9,7 @@ import {
   TrendingUp,
   FileCheck,
 } from 'lucide-react'
+import AuthErrorBanner from './AuthErrorBanner'
 
 const features = [
   {
@@ -93,6 +95,10 @@ const testimonials = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
+      <Suspense>
+        <AuthErrorBanner />
+      </Suspense>
+
       {/* Navbar */}
       <nav className="fixed top-0 z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
