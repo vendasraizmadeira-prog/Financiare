@@ -48,9 +48,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="mb-6 flex items-start gap-2 rounded-xl bg-slate-900 p-4">
           <Terminal className="h-4 w-4 shrink-0 text-slate-400 mt-0.5" />
           <pre className="text-xs text-emerald-400 whitespace-pre-wrap break-all">
-{`UPDATE profiles
-SET is_admin = true
-WHERE email = '${user.email}';`}
+{`INSERT INTO profiles (id, email, is_admin)
+VALUES ('${user.id}', '${user.email}', true)
+ON CONFLICT (id) DO UPDATE SET is_admin = true;`}
           </pre>
         </div>
 

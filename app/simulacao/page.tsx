@@ -39,6 +39,7 @@ export default function SimulacaoPage() {
   const [answers, setAnswers] = useState<Partial<SimulationAnswers>>(defaultAnswers)
   const [submitting, setSubmitting] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [saveError, setSaveError] = useState('')
 
   const step = SIMULATION_STEPS[currentStep]
   const totalSteps = SIMULATION_STEPS.length
@@ -97,14 +98,19 @@ export default function SimulacaoPage() {
   // ── Final submit ──────────────────────────────────────────
   async function handleSubmit() {
     setSubmitting(true)
+    setSaveError('')
 
     const fullAnswers = answers as SimulationAnswers
     const result = calculateScore(fullAnswers)
 
     const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    const { data, error } = await supabase
+    if (authError) {
+      console.error('[simulacao] auth error:', authError.message)
+    }
+
+    const { data, error: insertError } = await supabase
       .from('simulations')
       .insert({
         user_id: user?.id ?? null,
@@ -114,8 +120,10 @@ export default function SimulacaoPage() {
       .select('id')
       .single()
 
-    if (error || !data) {
-      // If DB fails, still show result via sessionStorage
+    if (insertError || !data) {
+      const msg = insertError?.message ?? 'no data returned'
+      console.error('[simulacao] insert error:', msg, '| user:', user?.id ?? 'anon')
+      setSaveError(`Erro ao salvar (${msg}) — resultado exibido localmente.`)
       sessionStorage.setItem('financiare_result', JSON.stringify({ answers: fullAnswers, result }))
       router.push('/resultado?local=1')
       return
@@ -202,6 +210,13 @@ export default function SimulacaoPage() {
             )
           })}
         </div>
+
+        {/* Save error */}
+        {saveError && (
+          <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-600">
+            {saveError}
+          </div>
+        )}
 
         {/* Navigation */}
         <div className="mt-8 flex items-center justify-between gap-4">
