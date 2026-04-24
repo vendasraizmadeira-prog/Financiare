@@ -20,6 +20,7 @@ import { createClient } from '@/lib/supabase/client'
 import type { ScoringResult, ScoringFactor, FactorStatus } from '@/types'
 import { cn, formatCurrency, scoreColor, scoreLabel, statusBarColor, statusBg, statusColor } from '@/lib/utils'
 import ScoreGauge from '@/components/ScoreGauge'
+import ContactCTA from './ContactCTA'
 
 export default function ResultadoContent() {
   const searchParams = useSearchParams()
@@ -188,12 +189,11 @@ export default function ResultadoContent() {
 
         {/* CTA Buttons */}
         <div className="mb-8 flex flex-wrap gap-3">
-          <Link
-            href="/auth/register"
+          <ContactCTA
+            score={score}
+            name={result.factors?.[0] ? undefined : undefined}
             className="flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors shadow-md shadow-emerald-100"
-          >
-            Quero orientação para ser aprovado <ArrowRight className="h-4 w-4" />
-          </Link>
+          />
           <button
             onClick={() => {
               if (navigator.share) {
@@ -296,12 +296,10 @@ export default function ResultadoContent() {
             Você pode tentar sozinho… ou seguir com orientação para aumentar suas chances com mais segurança.
           </p>
           <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href="/auth/register"
+            <ContactCTA
+              score={score}
               className="flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors"
-            >
-              Quero orientação para ser aprovado <ArrowRight className="h-4 w-4" />
-            </Link>
+            />
             <Link
               href="/simulacao"
               className="flex items-center gap-2 rounded-xl border border-emerald-400 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
