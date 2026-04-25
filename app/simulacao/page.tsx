@@ -31,6 +31,8 @@ const defaultAnswers: Partial<SimulationAnswers> = {
   has_proof_of_income: true,
   has_restrictions: false,
   has_paid_asset: false,
+  has_down_payment: false,
+  down_payment: 0,
 }
 
 export default function SimulacaoPage() {
@@ -47,7 +49,14 @@ export default function SimulacaoPage() {
 
   // ── Field update ─────────────────────────────────────────
   const updateField = useCallback((id: string, value: unknown) => {
-    setAnswers((prev) => ({ ...prev, [id]: value }))
+    setAnswers((prev) => {
+      const next = { ...prev, [id]: value }
+      // Reset down_payment when user says they have no entry
+      if (id === 'has_down_payment' && value === false) {
+        next.down_payment = 0
+      }
+      return next
+    })
     setErrors((prev) => {
       const next = { ...prev }
       delete next[id]
@@ -65,6 +74,8 @@ export default function SimulacaoPage() {
 
       // restriction_level only required when has_restrictions = true
       if (q.id === 'restriction_level' && !answers.has_restrictions) continue
+      // down_payment only required when has_down_payment = true
+      if (q.id === 'down_payment' && !answers.has_down_payment) continue
 
       if (val === undefined || val === null || val === '') {
         newErrors[q.id] = 'Este campo é obrigatório'
@@ -174,6 +185,8 @@ export default function SimulacaoPage() {
           {step.questions.map((q) => {
             // Hide restriction_level if no restrictions
             if (q.id === 'restriction_level' && !answers.has_restrictions) return null
+            // Hide down_payment amount if user has no entry
+            if (q.id === 'down_payment' && !answers.has_down_payment) return null
 
             return (
               <div key={q.id} className="rounded-xl bg-white p-6 shadow-sm border border-slate-100">

@@ -92,6 +92,7 @@ export interface SimulationAnswers {
   has_paid_asset: boolean   // owns a paid-off property/vehicle
 
   // Optional qualification fields
+  has_down_payment?: boolean
   has_fgts?: 'yes' | 'no' | 'unknown'
   financing_with?: 'alone' | 'spouse' | 'other'
   has_land?: boolean

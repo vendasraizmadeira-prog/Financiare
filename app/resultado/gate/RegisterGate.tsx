@@ -3,7 +3,10 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Lock, CheckCircle, Loader2, Mail, Eye, EyeOff, TrendingUp, Shield, BarChart2 } from 'lucide-react'
+import {
+  Lock, CheckCircle, Loader2, Mail, Eye, EyeOff,
+  TrendingUp, Shield, BarChart2, X,
+} from 'lucide-react'
 import { NavLogo } from '@/components/LogoMark'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -14,6 +17,7 @@ export default function RegisterGate() {
   const router = useRouter()
   const [approvalPct, setApprovalPct] = useState<number | null>(null)
   const [step, setStep] = useState<Step>('form')
+  const [showModal, setShowModal] = useState(false)
 
   // Form state
   const [fullName, setFullName] = useState('')
@@ -69,17 +73,16 @@ export default function RegisterGate() {
       return
     }
 
-    // Auto-confirmed (session returned immediately)
     if (data.session) {
       window.location.href = '/resultado/salvar'
       return
     }
 
-    // Email confirmation needed
     setStep('email-sent')
     setLoading(false)
   }
 
+  // Email-sent state (replaces the modal content)
   if (step === 'email-sent') {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4 py-12">
@@ -104,77 +107,94 @@ export default function RegisterGate() {
     <div className="min-h-screen bg-slate-50">
       {/* Nav */}
       <nav className="border-b border-slate-100 bg-white px-4 py-4">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-lg">
           <NavLogo iconSize={22} />
         </div>
       </nav>
 
-      <div className="mx-auto max-w-4xl px-4 py-10">
-        <div className="grid gap-8 md:grid-cols-2 md:items-start">
-
-          {/* Left: preview + benefits */}
-          <div>
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-700">
-              <CheckCircle className="h-3.5 w-3.5" />
-              Análise concluída
-            </div>
-            <h1 className="mb-4 text-3xl font-extrabold text-slate-900 leading-tight">
-              Sua análise está pronta!
-            </h1>
-            <p className="mb-6 text-slate-500">
-              Crie sua conta gratuita para desbloquear seu resultado completo e plano de ação personalizado.
+      <div className="mx-auto max-w-lg px-4 py-10">
+        {/* Locked score card */}
+        <div
+          className="mb-6 overflow-hidden rounded-2xl p-8 text-white shadow-lg"
+          style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A4D58 100%)' }}
+        >
+          <p className="mb-1 text-center text-xs font-semibold uppercase tracking-widest text-slate-400">
+            Análise concluída
+          </p>
+          <div className="my-5 flex flex-col items-center gap-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+              Sua aprovação estimada
             </p>
-
-            {/* Blurred score preview */}
-            {approvalPct !== null && (
-              <div
-                className="relative mb-6 overflow-hidden rounded-2xl p-8 text-white shadow-lg"
-                style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A4D58 100%)' }}
+            <div className="relative flex items-center justify-center">
+              <span
+                className="text-7xl font-extrabold text-emerald-400"
+                style={{ filter: 'blur(14px)', userSelect: 'none' }}
               >
-                <div className="flex flex-col items-center gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-                    Sua aprovação estimada
-                  </p>
-                  <div className="relative">
-                    <span
-                      className="text-6xl font-extrabold text-emerald-400"
-                      style={{ filter: 'blur(12px)', userSelect: 'none' }}
-                    >
-                      {approvalPct}%
-                    </span>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex flex-col items-center gap-1.5">
-                        <Lock className="h-8 w-8 text-white/80" />
-                        <span className="text-xs font-semibold text-white/70">Bloqueado</span>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-sm text-slate-400">Crie sua conta para ver</p>
-                </div>
+                {approvalPct ?? '??'}%
+              </span>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Lock className="h-8 w-8 text-white/80" />
               </div>
-            )}
-
-            {/* Benefit bullets */}
-            <div className="space-y-3">
-              {[
-                { icon: BarChart2, text: 'Score detalhado em 5 fatores com plano de ação específico' },
-                { icon: TrendingUp, text: 'Acompanhe sua evolução e refaça sua análise quando quiser' },
-                { icon: Shield, text: 'Seus dados são protegidos e nunca compartilhados sem sua permissão' },
-              ].map(({ icon: Icon, text }, i) => (
-                <div key={i} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-white p-4 shadow-sm">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
-                    <Icon className="h-4 w-4 text-emerald-600" />
-                  </div>
-                  <p className="text-sm text-slate-700">{text}</p>
-                </div>
-              ))}
             </div>
           </div>
 
-          {/* Right: registration form */}
-          <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-            <h2 className="mb-1 text-xl font-bold text-slate-900">Criar conta gratuita</h2>
-            <p className="mb-6 text-sm text-slate-500">Leva menos de 1 minuto. Sem cartão de crédito.</p>
+          <button
+            onClick={() => setShowModal(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3.5 text-sm font-bold text-white shadow-md transition-all hover:bg-emerald-500"
+          >
+            <CheckCircle className="h-4 w-4" />
+            Criar conta para visualizar
+          </button>
+
+          <p className="mt-3 text-center text-xs text-slate-400">
+            Grátis · Sem cartão de crédito · Leva menos de 1 minuto
+          </p>
+        </div>
+
+        {/* Benefit bullets */}
+        <div className="space-y-3">
+          {[
+            { icon: BarChart2, text: 'Score detalhado em 5 fatores com plano de ação específico' },
+            { icon: TrendingUp, text: 'Entenda exatamente o que melhorar para ser aprovado' },
+            { icon: Shield, text: 'Seus dados são protegidos e nunca compartilhados sem sua permissão' },
+          ].map(({ icon: Icon, text }, i) => (
+            <div key={i} className="flex items-start gap-3 rounded-xl border border-slate-100 bg-white p-4 shadow-sm">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
+                <Icon className="h-4 w-4 text-emerald-600" />
+              </div>
+              <p className="text-sm text-slate-700">{text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 text-center text-sm text-slate-500">
+          Já tem conta?{' '}
+          <Link href="/auth/login" className="font-semibold text-emerald-600 hover:underline">
+            Fazer login
+          </Link>
+        </div>
+      </div>
+
+      {/* Modal de cadastro */}
+      {showModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 sm:items-center"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowModal(false) }}
+        >
+          <div className="w-full max-w-md rounded-t-2xl bg-white p-6 shadow-2xl sm:rounded-2xl">
+            {/* Header */}
+            <div className="mb-5 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900">Criar conta gratuita</h2>
+                <p className="text-sm text-slate-500">Leva menos de 1 minuto</p>
+              </div>
+              <button
+                onClick={() => setShowModal(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-400 hover:bg-slate-200 transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -250,19 +270,12 @@ export default function RegisterGate() {
               </button>
             </form>
 
-            <div className="mt-4 text-center text-sm text-slate-500">
-              Ja tem conta?{' '}
-              <Link href="/auth/login" className="font-semibold text-emerald-600 hover:underline">
-                Fazer login
-              </Link>
-            </div>
-
             <p className="mt-4 text-center text-xs text-slate-400">
-              Ao criar sua conta, voce concorda com nossos termos de uso e politica de privacidade.
+              Ao criar sua conta, você concorda com nossos termos de uso e política de privacidade.
             </p>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

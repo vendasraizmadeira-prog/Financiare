@@ -269,12 +269,19 @@ export const SIMULATION_STEPS: Step[] = [
         required: true,
       },
       {
-        id: 'down_payment',
+        id: 'has_down_payment',
         label: 'Você possui algum valor para entrada hoje?',
-        sublabel: 'Mesmo que não tenha, ainda existem possibilidades, queremos entender seu momento.',
+        sublabel: 'Mesmo que não tenha, ainda existem possibilidades.',
+        type: 'boolean',
+        required: true,
+      },
+      {
+        id: 'down_payment',
+        label: 'Qual o valor disponível para entrada?',
+        sublabel: 'Informe o valor aproximado que você tem disponível.',
         type: 'currency',
         placeholder: '0,00',
-        required: true,
+        required: false,
       },
       {
         id: 'desired_term_months',
@@ -302,7 +309,6 @@ export const SIMULATION_STEPS: Step[] = [
         required: false,
         options: [
           { value: 'approval', label: 'Não sei se consigo aprovação' },
-          { value: 'entry', label: 'Não tenho entrada' },
           { value: 'income', label: 'Minha renda é limitada' },
           { value: 'process', label: 'Tenho dúvidas sobre o processo' },
           { value: 'start', label: 'Não sei por onde começar' },
