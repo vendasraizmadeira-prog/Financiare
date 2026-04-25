@@ -53,6 +53,11 @@
     -webkit-font-smoothing: antialiased;
     font-family: 'Outfit', system-ui, sans-serif;
   }
+
+  /* Prevent iOS Safari auto-zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
 }
 
 @layer utilities {
