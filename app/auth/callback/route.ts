@@ -16,7 +16,8 @@ export async function GET(request: Request) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      // After email confirmation, go to salvar to claim any pending simulation
+      return NextResponse.redirect(`${origin}/resultado/salvar`)
     }
     // Code exchange failed (likely expired)
     return NextResponse.redirect(`${origin}/auth/confirmar?expired=1`)

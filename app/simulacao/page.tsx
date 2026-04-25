@@ -105,22 +105,16 @@ export default function SimulacaoPage() {
 
     const supabase = createClient()
     const { data: { session } } = await supabase.auth.getSession()
-    const user = session?.user
 
-    // Not logged in — save locally so the user can claim after login
-    if (!user) {
+    if (!session?.user) {
       sessionStorage.setItem('financiare_result', JSON.stringify({ answers: fullAnswers, result }))
-      router.push('/resultado?local=1')
+      router.push('/resultado/gate')
       return
     }
 
     const { data, error: insertError } = await supabase
       .from('simulations')
-      .insert({
-        user_id: user.id,
-        answers: fullAnswers,
-        result,
-      })
+      .insert({ user_id: session.user.id, answers: fullAnswers, result })
       .select('id')
       .single()
 
