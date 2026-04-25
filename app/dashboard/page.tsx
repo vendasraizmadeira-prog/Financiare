@@ -1,17 +1,14 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
-  Plus,
   LogOut,
-  Clock,
   BarChart2,
-  ArrowRight,
   ChevronRight,
 } from 'lucide-react'
 import { NavLogo } from '@/components/LogoMark'
 import { createClient } from '@/lib/supabase/server'
 import type { ScoringResult } from '@/types'
-import { scoreColor, scoreLabel, cn } from '@/lib/utils'
+import { scoreColor, scoreLabel } from '@/lib/utils'
 
 function ScoreBadge({ score }: { score: number }) {
   const color = scoreColor(score)
@@ -74,21 +71,13 @@ export default async function DashboardPage() {
 
       <div className="mx-auto max-w-5xl px-4 py-8">
         {/* Welcome */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">
-              Olá, {firstName}! 👋
-            </h1>
-            <p className="mt-1 text-slate-500">
-              Acompanhe suas análises e melhore sua taxa de aprovação.
-            </p>
-          </div>
-          <Link
-            href="/simulacao"
-            className="hidden items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors sm:flex"
-          >
-            <Plus className="h-4 w-4" /> Nova análise
-          </Link>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-slate-900">
+            Olá, {firstName}! 👋
+          </h1>
+          <p className="mt-1 text-slate-500">
+            Veja sua análise detalhada e seu plano de ação personalizado.
+          </p>
         </div>
 
         {/* Latest score card */}
@@ -148,87 +137,12 @@ export default async function DashboardPage() {
         ) : (
           <div className="mb-6 rounded-2xl border-2 border-dashed border-slate-200 bg-white p-10 text-center">
             <BarChart2 className="mx-auto mb-3 h-10 w-10 text-slate-300" />
-            <h3 className="mb-1 font-semibold text-slate-700">Nenhuma análise ainda</h3>
-            <p className="mb-5 text-sm text-slate-400">
-              Faça sua primeira análise de aprovação e descubra suas chances.
+            <h3 className="mb-1 font-semibold text-slate-700">Nenhuma análise encontrada</h3>
+            <p className="text-sm text-slate-400">
+              Entre em contato com nossa equipe para iniciar sua análise.
             </p>
-            <Link
-              href="/simulacao"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
-            >
-              Começar análise <ArrowRight className="h-4 w-4" />
-            </Link>
           </div>
         )}
-
-        {/* History */}
-        {simulations && simulations.length > 0 && (
-          <div>
-            <h2 className="mb-4 text-lg font-bold text-slate-900">Histórico de Análises</h2>
-            <div className="space-y-3">
-              {simulations.map((sim) => {
-                const r = sim.result as ScoringResult
-                const date = new Date(sim.created_at).toLocaleDateString('pt-BR', {
-                  day: '2-digit',
-                  month: 'short',
-                  year: 'numeric',
-                })
-                const time = new Date(sim.created_at).toLocaleTimeString('pt-BR', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })
-                const answers = sim.answers as { financing_type?: string; asset_value?: number }
-
-                return (
-                  <Link
-                    key={sim.id}
-                    href={`/resultado?id=${sim.id}`}
-                    className="flex items-center justify-between rounded-xl border border-slate-100 bg-white p-4 hover:shadow-md transition-all"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold"
-                        style={{
-                          background: `${scoreColor(r.approval_percentage)}18`,
-                          color: scoreColor(r.approval_percentage),
-                        }}
-                      >
-                        {r.approval_percentage}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-slate-800">
-                          {answers?.financing_type === 'property'
-                            ? 'Financiamento Imobiliário'
-                            : answers?.financing_type === 'vehicle'
-                            ? 'Financiamento de Veículo'
-                            : 'Crédito Pessoal'}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                          <Clock className="h-3 w-3" />
-                          {date} às {time}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <ScoreBadge score={r.approval_percentage} />
-                      <ChevronRight className="h-4 w-4 text-slate-300" />
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Mobile CTA */}
-        <div className="mt-8 sm:hidden">
-          <Link
-            href="/simulacao"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 py-4 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
-          >
-            <Plus className="h-4 w-4" /> Nova análise
-          </Link>
-        </div>
       </div>
     </div>
   )

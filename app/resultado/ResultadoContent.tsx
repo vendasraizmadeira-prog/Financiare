@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
-  RotateCcw, CheckCircle, AlertCircle, XCircle,
+  CheckCircle, AlertCircle, XCircle,
   Shield, CreditCard, TrendingUp, Briefcase, DollarSign,
   LayoutDashboard, Clock, AlertTriangle, BookmarkPlus,
   ChevronRight,
@@ -484,10 +484,7 @@ export default function ResultadoContent() {
         <div className="text-center">
           <XCircle className="mx-auto mb-4 h-12 w-12 text-red-400" />
           <h2 className="mb-2 text-xl font-bold text-slate-900">Análise não encontrada</h2>
-          <p className="mb-6 text-slate-500">Faça uma nova simulação para ver seu resultado.</p>
-          <Link href="/simulacao" className="rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700">
-            Nova Simulação
-          </Link>
+          <p className="text-slate-500">Entre em contato com nossa equipe para iniciar sua análise.</p>
         </div>
       </div>
     )
@@ -502,22 +499,18 @@ export default function ResultadoContent() {
       <nav className="sticky top-0 z-30 border-b border-slate-100 bg-white px-4 py-3 shadow-sm">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <NavLogo iconSize={22} />
-          <div className="flex items-center gap-3">
-            {local && (
-              <Link href="/auth/login" className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 transition-colors">
-                <BookmarkPlus className="h-3.5 w-3.5" /> Salvar resultado
-              </Link>
-            )}
-            <Link href="/simulacao" className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs text-slate-500 hover:bg-slate-50 transition-colors">
-              <RotateCcw className="h-3.5 w-3.5" /> Nova análise
+          {local && (
+            <Link href="/auth/login" className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 transition-colors">
+              <BookmarkPlus className="h-3.5 w-3.5" /> Salvar resultado
             </Link>
-          </div>
+          )}
         </div>
       </nav>
 
-      <div className="mx-auto max-w-6xl px-4 py-6">
+      {/* pb-24 on mobile to clear bottom bar */}
+      <div className="mx-auto max-w-6xl px-4 py-6 pb-24 md:pb-6">
         <div className="flex gap-6">
-          {/* Sidebar — desktop */}
+          {/* Sidebar — desktop only */}
           <aside className="hidden md:block w-56 shrink-0">
             <div className="sticky top-20 rounded-2xl border border-slate-100 bg-white p-3 shadow-sm">
               <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-widest text-slate-400">Módulos</p>
@@ -528,7 +521,7 @@ export default function ResultadoContent() {
                   return (
                     <button
                       key={item.id}
-                      onClick={() => setActiveModule(item.id)}
+                      onClick={() => { setActiveModule(item.id); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                       className={cn(
                         'flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm transition-all',
                         isActive
@@ -550,32 +543,6 @@ export default function ResultadoContent() {
 
           {/* Main content */}
           <div className="flex-1 min-w-0">
-            {/* Mobile tabs */}
-            <div className="mb-5 -mx-4 overflow-x-auto md:hidden">
-              <div className="flex gap-2 px-4 pb-2">
-                {NAV_ITEMS.map((item) => {
-                  const factor = item.factorId ? result.factors.find(f => f.id === item.factorId) : null
-                  const isActive = activeModule === item.id
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveModule(item.id)}
-                      className={cn(
-                        'flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-semibold transition-all whitespace-nowrap',
-                        isActive
-                          ? 'bg-slate-900 text-white'
-                          : 'border border-slate-200 bg-white text-slate-600'
-                      )}
-                    >
-                      {factor && <div className={cn('h-2 w-2 rounded-full', statusDotColor(factor.status))} />}
-                      {item.shortLabel}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Module content */}
             {activeModule === 'overview'
               ? <OverviewModule result={result} />
               : activeFactor
@@ -584,6 +551,38 @@ export default function ResultadoContent() {
             }
           </div>
         </div>
+      </div>
+
+      {/* Bottom bar — mobile only */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-100 bg-white md:hidden">
+        <div className="flex">
+          {NAV_ITEMS.map((item) => {
+            const factor = item.factorId ? result.factors.find(f => f.id === item.factorId) : null
+            const isActive = activeModule === item.id
+            return (
+              <button
+                key={item.id}
+                onClick={() => { setActiveModule(item.id); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                className={cn(
+                  'relative flex flex-1 flex-col items-center gap-1 py-3 text-[10px] font-semibold transition-colors',
+                  isActive ? 'text-emerald-600' : 'text-slate-400'
+                )}
+              >
+                {/* Active indicator */}
+                {isActive && (
+                  <span className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full bg-emerald-500" />
+                )}
+                <item.icon className={cn('h-5 w-5', isActive ? 'text-emerald-600' : 'text-slate-400')} />
+                <span>{item.shortLabel}</span>
+                {factor && (
+                  <span className={cn('absolute top-2 right-1/4 h-1.5 w-1.5 rounded-full', statusDotColor(factor.status))} />
+                )}
+              </button>
+            )
+          })}
+        </div>
+        {/* Safe area spacer for iOS */}
+        <div className="h-safe-bottom bg-white" style={{ height: 'env(safe-area-inset-bottom)' }} />
       </div>
     </div>
   )
