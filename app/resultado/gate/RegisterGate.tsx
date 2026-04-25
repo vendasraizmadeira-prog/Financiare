@@ -129,7 +129,7 @@ export default function RegisterGate() {
             {approvalPct !== null && (
               <div
                 className="relative mb-6 overflow-hidden rounded-2xl p-8 text-white shadow-lg"
-                style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A4D58 100%)' }}
               >
                 <div className="flex flex-col items-center gap-2">
                   <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">

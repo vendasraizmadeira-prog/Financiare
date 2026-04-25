@@ -42,7 +42,7 @@ export default function ConfirmarContent() {
 
   if (sent) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-[#0F2830] px-4">
         <div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-xl">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
             <CheckCircle className="h-8 w-8 text-emerald-600" />
@@ -73,7 +73,7 @@ export default function ConfirmarContent() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-[#0F2830] px-4 py-12">
       <div className="w-full max-w-md">
         <div className="rounded-2xl bg-white p-8 shadow-xl">
           {/* Logo */}

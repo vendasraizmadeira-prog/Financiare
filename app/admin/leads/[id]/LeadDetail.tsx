@@ -103,7 +103,7 @@ export default function LeadDetail({ lead }: { lead: Lead }) {
         {/* Score Hero */}
         <div
           className="rounded-2xl p-6 text-white"
-          style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' }}
+          style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A4D58 100%)' }}
         >
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <div

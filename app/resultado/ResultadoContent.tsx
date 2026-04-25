@@ -258,27 +258,31 @@ function OverviewModule({ result }: { result: ScoringResult }) {
     <div className="space-y-6">
       {/* Score hero */}
       <div
-        className="rounded-2xl p-8 text-white shadow-md"
-        style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A3D4A 60%, #235F6C 100%)' }}
+        className="rounded-2xl p-5 text-white shadow-md"
+        style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A4D58 100%)' }}
       >
-        <div className="flex flex-col items-center md:flex-row md:items-center md:gap-12">
+        <div className="flex items-center gap-4">
           <div className="shrink-0">
-            <ScoreGauge score={score} size={180} />
+            <ScoreGauge score={score} size={130} />
           </div>
-          <div className="mt-6 text-center md:mt-0 md:text-left">
-            <p className="text-sm font-medium uppercase tracking-widest text-slate-400">Resultado da sua análise</p>
-            <div className="mt-2 text-6xl font-extrabold" style={{ color }}>{score}%</div>
-            <div className="mt-2 inline-block rounded-full px-4 py-1 text-sm font-bold" style={{ background: `${color}22`, color }}>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+              Resultado da análise
+            </p>
+            <div
+              className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"
+              style={{ background: `${color}28`, color }}
+            >
               Aprovação {result.label}
             </div>
-            <p className="mt-4 max-w-sm text-sm text-slate-300">
+            <p className="mt-3 text-sm leading-relaxed text-slate-300">
               {score >= 80
-                ? 'Seu perfil está bem posicionado. Navegue pelos módulos abaixo para entender cada fator e como mantê-lo.'
+                ? 'Perfil bem posicionado. Veja cada módulo para manter seu resultado.'
                 : score >= 60
-                ? 'Você tem potencial de aprovação com alguns ajustes. Veja os módulos abaixo para saber exatamente o que melhorar.'
+                ? 'Potencial de aprovação com ajustes pontuais. Siga o plano de cada módulo.'
                 : score >= 40
-                ? 'Há pontos importantes para ajustar antes de avançar. Siga o plano de cada módulo para melhorar seu perfil.'
-                : 'Seu perfil precisa de atenção em critérios fundamentais. Com o plano certo você pode reverter essa situação.'}
+                ? 'Pontos importantes a ajustar. Cada módulo tem um plano de ação específico.'
+                : 'Atenção necessária em critérios fundamentais. O plano de ação vai te guiar.'}
             </p>
           </div>
         </div>

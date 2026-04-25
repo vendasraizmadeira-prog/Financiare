@@ -84,7 +84,7 @@ export default async function DashboardPage() {
         {latestResult ? (
           <div
             className="mb-6 rounded-2xl p-6 text-white shadow-lg"
-            style={{ background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A4D58 100%)' }}
           >
             <div className="flex items-start justify-between">
               <div>
