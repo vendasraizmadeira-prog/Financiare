@@ -1,21 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
-  --color-brand-950: #052e16;
+  /* ── Financiare brand palette (replaces emerald) ── */
+  --color-emerald-50:  #EEF4F6;
+  --color-emerald-100: #D6E8EE;
+  --color-emerald-200: #AECFDB;
+  --color-emerald-300: #7EB5C7;
+  --color-emerald-400: #4E9BAD;
+  --color-emerald-500: #2E7A8A;
+  --color-emerald-600: #235F6C;
+  --color-emerald-700: #1A4D58;
+  --color-emerald-800: #122F38;
+  --color-emerald-900: #0B1F27;
 
-  --font-sans: 'Inter', system-ui, sans-serif;
+  /* Extra brand tokens */
+  --color-brand-purple: #6B7BAA;
+  --color-brand-slate:  #536575;
+  --color-brand-blue:   #89AEBE;
+  --color-brand-light:  #CDD8E3;
+  --color-brand-navy:   #0F2830;
+
+  --font-sans: 'Outfit', system-ui, sans-serif;
 
   --animate-score-fill: score-fill 1.5s ease-out forwards;
   --animate-fade-in: fade-in 0.5s ease-out;
@@ -44,7 +51,7 @@
     background-color: white;
     color: #0f172a;
     -webkit-font-smoothing: antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Outfit', system-ui, sans-serif;
   }
 }
 
@@ -58,12 +65,10 @@
   }
 }
 
-/* Score gauge animation */
 .score-ring {
   transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Remove number input spinners */
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;

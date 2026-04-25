@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   ArrowRight,
-  TrendingUp,
   RotateCcw,
   Share2,
   CheckCircle,
@@ -17,6 +16,7 @@ import {
   AlertTriangle,
   BookmarkPlus,
 } from 'lucide-react'
+import { NavLogo } from '@/components/LogoMark'
 import { createClient } from '@/lib/supabase/client'
 import type { ScoringResult, ScoringFactor, FactorStatus } from '@/types'
 import { cn, formatCurrency, scoreColor, scoreLabel, statusBarColor, statusBg, statusColor } from '@/lib/utils'
@@ -104,12 +104,7 @@ export default function ResultadoContent() {
       {/* Navbar */}
       <nav className="bg-white border-b border-slate-100 px-4 py-4">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600">
-              <TrendingUp className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-slate-900">Financiare</span>
-          </div>
+          <NavLogo iconSize={22} />
           <Link
             href="/simulacao"
             className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"

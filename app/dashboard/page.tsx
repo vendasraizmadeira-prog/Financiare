@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import {
-  TrendingUp,
   Plus,
   LogOut,
   Clock,
@@ -9,6 +8,7 @@ import {
   ArrowRight,
   ChevronRight,
 } from 'lucide-react'
+import { NavLogo } from '@/components/LogoMark'
 import { createClient } from '@/lib/supabase/server'
 import type { ScoringResult } from '@/types'
 import { scoreColor, scoreLabel, cn } from '@/lib/utils'
@@ -57,12 +57,7 @@ export default async function DashboardPage() {
       {/* Navbar */}
       <nav className="bg-white border-b border-slate-100 px-4 py-4">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600">
-              <TrendingUp className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-bold text-slate-900">Financiare</span>
-          </div>
+          <NavLogo iconSize={22} />
           <div className="flex items-center gap-3">
             <span className="hidden text-sm text-slate-500 sm:block">{user.email}</span>
             <form action={handleSignOut}>

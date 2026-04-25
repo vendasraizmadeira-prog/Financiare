@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { TrendingUp, Eye, EyeOff, Loader2, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Eye, EyeOff, Loader2, ArrowLeft, CheckCircle } from 'lucide-react'
+import { LogoMark } from '@/components/LogoMark'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 
@@ -89,10 +90,8 @@ export default function RegisterPage() {
         <div className="rounded-2xl bg-white p-8 shadow-xl">
           {/* Logo */}
           <div className="mb-6 flex flex-col items-center text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600">
-              <TrendingUp className="h-6 w-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold text-slate-900">Criar conta grátis</h1>
+            <LogoMark size={48} />
+            <h1 className="mt-3 text-2xl font-bold text-slate-900">Criar conta grátis</h1>
             <p className="mt-1 text-sm text-slate-500">
               Comece a análise de aprovação agora
             </p>

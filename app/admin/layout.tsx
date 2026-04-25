@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { TrendingUp, Lock } from 'lucide-react'
+import { Lock } from 'lucide-react'
+import { LogoMark } from '@/components/LogoMark'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -14,8 +15,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm border border-slate-100 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-600">
-          <TrendingUp className="h-7 w-7 text-white" />
+        <div className="mb-4 flex justify-center">
+          <LogoMark size={48} />
         </div>
         <div className="mb-4 flex justify-center">
           <div className="flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600">

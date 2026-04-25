@@ -6,11 +6,11 @@ import {
   Clock,
   ArrowRight,
   Star,
-  TrendingUp,
   FileCheck,
 } from 'lucide-react'
 import AuthErrorBanner from './AuthErrorBanner'
 import { createClient } from '@/lib/supabase/server'
+import { NavLogo } from '@/components/LogoMark'
 
 const features = [
   {
@@ -107,12 +107,7 @@ export default async function HomePage() {
       {/* Navbar */}
       <nav className="fixed top-0 z-50 w-full border-b border-slate-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600">
-              <TrendingUp className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-bold text-slate-900">Financiare</span>
-          </div>
+          <NavLogo iconSize={26} showTagline />
           <div className="flex items-center gap-3">
             {user ? (
               <>
@@ -147,7 +142,7 @@ export default async function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 pt-32 pb-24">
+      <section className="relative overflow-hidden pt-32 pb-24" style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A3D4A 55%, #235F6C 100%)' }}>
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
           <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-emerald-600/10 blur-3xl" />
@@ -257,7 +252,7 @@ export default async function HomePage() {
       </section>
 
       {/* Factors breakdown */}
-      <section className="bg-slate-900 py-20">
+      <section className="py-20" style={{ background: '#0F2830' }}>
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
@@ -363,12 +358,7 @@ export default async function HomePage() {
       <footer className="border-t border-slate-100 bg-white py-12">
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600">
-                <TrendingUp className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-bold text-slate-900">Financiare</span>
-            </div>
+            <NavLogo iconSize={20} />
             <p className="text-sm text-slate-400">
               © {new Date().getFullYear()} Financiare. Todos os direitos reservados.
             </p>

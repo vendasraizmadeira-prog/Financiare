@@ -10,10 +10,10 @@ import {
   ChevronRight,
   ChevronLeft,
   Loader2,
-  TrendingUp,
   CheckCircle,
   Shield,
 } from 'lucide-react'
+import { NavLogo } from '@/components/LogoMark'
 import { SIMULATION_STEPS } from '@/lib/scoring/questions'
 import { calculateScore } from '@/lib/scoring/algorithm'
 import { createClient } from '@/lib/supabase/client'
@@ -143,12 +143,7 @@ export default function SimulacaoPage() {
         <div className="mx-auto max-w-2xl px-4 py-4">
           {/* Logo + title */}
           <div className="mb-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600">
-                <TrendingUp className="h-4 w-4 text-white" />
-              </div>
-              <span className="font-bold text-slate-900">Financiare</span>
-            </div>
+            <NavLogo iconSize={22} />
             <span className="text-sm text-slate-400">
               Etapa {currentStep + 1} de {totalSteps}
             </span>
