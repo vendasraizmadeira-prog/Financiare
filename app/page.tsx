@@ -7,6 +7,7 @@ import {
   ArrowRight,
   Star,
   FileCheck,
+  TrendingUp,
 } from 'lucide-react'
 import AuthErrorBanner from './AuthErrorBanner'
 import { createClient } from '@/lib/supabase/server'
