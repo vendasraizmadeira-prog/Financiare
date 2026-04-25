@@ -1,5 +1,14 @@
 import Image from 'next/image'
 
+interface LogoMarkProps {
+  size?: number
+}
+
+export function LogoMark({ size = 28 }: LogoMarkProps) {
+  const h = Math.round(size * 1.25)
+  return <Image src="/logo.svg" alt="Financiare" width={size} height={h} className="shrink-0" />
+}
+
 interface NavLogoProps {
   iconSize?: number
   showTagline?: boolean
