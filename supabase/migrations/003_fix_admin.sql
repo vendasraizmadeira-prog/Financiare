@@ -1,65 +1,40 @@
 -- ============================================================
--- 003 – Fix: garantir is_admin e políticas corretas
+-- 003 – Fix: recursão infinita nas policies de profiles/simulations
+-- Substitui queries em profiles dentro de policies de profiles
+-- pelo check direto no JWT (auth.jwt() -> 'app_metadata')
 -- Execute no Supabase Dashboard → SQL Editor
 -- ============================================================
 
--- 1. Garantir que as colunas de admin existam (idempotente)
-ALTER TABLE simulations
-  ADD COLUMN IF NOT EXISTS stage text NOT NULL DEFAULT 'new',
-  ADD COLUMN IF NOT EXISTS admin_notes text NOT NULL DEFAULT '';
-
-ALTER TABLE profiles
-  ADD COLUMN IF NOT EXISTS is_admin boolean NOT NULL DEFAULT false;
-
--- 2. Recriar política de leitura de simulações (com acesso admin)
-DROP POLICY IF EXISTS "Users can view own simulations" ON simulations;
-CREATE POLICY "Users can view own simulations"
-  ON simulations FOR SELECT
-  TO authenticated
-  USING (
-    user_id = auth.uid()
-    OR EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid() AND profiles.is_admin = true
-    )
-  );
-
--- 3. Política de update de simulações para admin (idempotente)
-DROP POLICY IF EXISTS "Admin can update simulations" ON simulations;
-CREATE POLICY "Admin can update simulations"
-  ON simulations FOR UPDATE
-  TO authenticated
-  USING (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid() AND profiles.is_admin = true
-    )
-  )
-  WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM profiles
-      WHERE profiles.id = auth.uid() AND profiles.is_admin = true
-    )
-  );
-
--- 4. Política de leitura de profiles (próprio + admin)
+-- Profiles: remover policy recursiva e recriar com JWT check
 DROP POLICY IF EXISTS "Admin can read all profiles" ON profiles;
 CREATE POLICY "Admin can read all profiles"
   ON profiles FOR SELECT
   TO authenticated
   USING (
     id = auth.uid()
-    OR EXISTS (
-      SELECT 1 FROM profiles p2
-      WHERE p2.id = auth.uid() AND p2.is_admin = true
-    )
+    OR (auth.jwt() -> 'app_metadata' ->> 'is_admin')::boolean = true
   );
 
--- 5. Índices para performance
-CREATE INDEX IF NOT EXISTS simulations_stage_idx ON simulations (stage);
+-- Simulations SELECT: admin check via JWT (sem query em profiles)
+DROP POLICY IF EXISTS "Users can view own simulations" ON simulations;
+CREATE POLICY "Users can view own simulations"
+  ON simulations FOR SELECT
+  TO authenticated
+  USING (
+    user_id = auth.uid()
+    OR (auth.jwt() -> 'app_metadata' ->> 'is_admin')::boolean = true
+  );
+
+-- Simulations UPDATE: admin check via JWT
+DROP POLICY IF EXISTS "Admin can update simulations" ON simulations;
+CREATE POLICY "Admin can update simulations"
+  ON simulations FOR UPDATE
+  TO authenticated
+  USING ((auth.jwt() -> 'app_metadata' ->> 'is_admin')::boolean = true)
+  WITH CHECK ((auth.jwt() -> 'app_metadata' ->> 'is_admin')::boolean = true);
 
 -- ============================================================
--- IMPORTANTE: após rodar o script acima, execute também:
--- (substitua pelo seu e-mail real se necessário)
+-- Para marcar um usuário como admin (substitua pelo e-mail real):
+-- UPDATE auth.users SET raw_app_meta_data = raw_app_meta_data || '{"is_admin": true}'
+-- WHERE email = 'SEU_EMAIL_AQUI';
 -- ============================================================
--- UPDATE profiles SET is_admin = true WHERE email = 'SEU_EMAIL_AQUI';
