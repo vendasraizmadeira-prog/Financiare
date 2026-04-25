@@ -104,7 +104,8 @@ export default function SimulacaoPage() {
     const result = calculateScore(fullAnswers)
 
     const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { session } } = await supabase.auth.getSession()
+    const user = session?.user
 
     // Not logged in — save locally so the user can claim after login
     if (!user) {
