@@ -143,58 +143,45 @@ export default async function HomePage() {
       </nav>
 
       {/* Hero */}
-      <section className="relative overflow-hidden pt-32 pb-24" style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A3D4A 55%, #235F6C 100%)' }}>
+      <section className="relative overflow-hidden pt-28 pb-16" style={{ background: 'linear-gradient(135deg, #0F2830 0%, #1A3D4A 55%, #235F6C 100%)' }}>
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
           <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-emerald-600/10 blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 text-sm text-emerald-400">
-            <Star className="h-3.5 w-3.5 fill-current" />
-            Análise gratuita com visão real do banco (sem impacto no seu CPF)
+        <div className="relative mx-auto max-w-3xl px-4 text-center">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 text-xs font-medium text-emerald-400">
+            <Star className="h-3 w-3 fill-current" />
+            Análise gratuita · Sem impacto no CPF
           </div>
 
-          <h1 className="mb-6 text-4xl font-extrabold leading-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="mb-5 text-3xl font-extrabold leading-tight text-white sm:text-4xl lg:text-5xl">
             Descubra se você está pronto para ser{' '}
             <span className="text-emerald-400">aprovado</span> no financiamento
           </h1>
 
-          <p className="mx-auto mb-4 max-w-2xl text-lg text-slate-300">
-            A aprovação não depende só da renda, depende de como o banco enxerga seu perfil.
-            Em até 3 minutos, você entende onde está e o que precisa ajustar para avançar da forma certa.
+          <p className="mx-auto mb-8 max-w-lg text-base text-slate-300">
+            Em 3 minutos, entenda como o banco analisa seu perfil e o que precisa ajustar para avançar com segurança.
           </p>
 
-          <p className="mx-auto mb-10 max-w-xl text-sm text-slate-400">
-            Essa análise segue os mesmos critérios que utilizamos na Financiare para preparar nossos clientes para aprovação.
-          </p>
-
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link
-              href="/simulacao"
-              className="group flex items-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 text-base font-bold text-white shadow-lg shadow-emerald-500/25 hover:bg-emerald-400 transition-all"
-            >
-              Quero saber se posso ser aprovado
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              href={user ? '/dashboard' : '/auth/login'}
-              className="rounded-xl border border-slate-600 px-8 py-4 text-base font-semibold text-slate-300 hover:border-slate-400 hover:text-white transition-colors"
-            >
-              {user ? 'Ver minhas análises' : 'Já comecei minha análise'}
-            </Link>
-          </div>
+          <Link
+            href="/simulacao"
+            className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-bold text-emerald-900 shadow-xl hover:bg-emerald-50 transition-all"
+          >
+            Quero saber se posso ser aprovado
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
 
           {/* Hero Stats */}
-          <div className="mx-auto mt-16 grid max-w-2xl grid-cols-3 gap-8">
+          <div className="mx-auto mt-12 grid max-w-xl grid-cols-3 gap-6">
             {[
-              { value: '+2.400', label: 'Pessoas já analisadas' },
+              { value: '+2.400', label: 'Perfis analisados' },
               { value: '78%', label: 'Avançam para aprovação' },
               { value: '3 min', label: 'Tempo da análise' },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-3xl font-extrabold text-emerald-400">{stat.value}</div>
-                <div className="mt-1 text-sm text-slate-400">{stat.label}</div>
+                <div className="text-2xl font-extrabold text-emerald-400">{stat.value}</div>
+                <div className="mt-1 text-xs text-slate-400">{stat.label}</div>
               </div>
             ))}
           </div>
